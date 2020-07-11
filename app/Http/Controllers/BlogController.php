@@ -7,6 +7,7 @@ use App\Category;
 use App\Http\Requests\BlogsRequest;
 use App\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -37,6 +38,7 @@ class BlogController extends Controller
 
         $inputs['slug'] = Str::slug($request->title);
         $inputs['meta_title'] = $request->title;
+        $inputs['user_id'] = Auth::user()->id;
 
         if ($file = $request->file('photo_id')){
             $name = time().$file->getClientOriginalName();
@@ -56,9 +58,9 @@ class BlogController extends Controller
         return redirect('blog');
     }
 
-    public function show($id){
+    public function show($slug){
 
-        $blog = Blog::findOrFail($id);
+        $blog = Blog::whereSlug($slug)->first();
 
         return view('blog.show',compact('blog'));
     }

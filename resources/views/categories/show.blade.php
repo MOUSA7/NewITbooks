@@ -15,7 +15,7 @@
                     <article>
 
                         <hr>
-                        <h3><a href="{{route('blog.show',$blog->id)}}">{{$blog->title}}</a></h3>
+                        <h3><a href="{{route('blog.show',$blog->slug)}}">{{$blog->title}}</a></h3>
                     </article>
                 @endforeach
 

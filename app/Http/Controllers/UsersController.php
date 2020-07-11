@@ -25,7 +25,7 @@ class UsersController extends Controller
     public function UserList()
     {
         $users = User::all();
-        $roles = Role::pluck('name','id');
+        $roles = Role::pluck('name','id')->all();
 
         return view('users.userslist',compact('users','roles'));
         //

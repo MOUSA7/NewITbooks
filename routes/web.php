@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\View;
 */
 
 View::share('blogs',App\Blog::all());
+View::share('c',App\Category::latest()->get());
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,7 +32,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/blog','BlogController@index')->name('blog.index');
 Route::get('/blog/create','BlogController@create')->name('blog.create');
 Route::post('/blog/create','BlogController@store');
-Route::get('/blog/{id}','BlogController@show')->name('blog.show');
+Route::get('/blog/{slug}','BlogController@show')->name('blog.show');
 Route::patch('/blog/{id}','BlogController@publish');
 Route::get('/blog/{id}/edit','BlogController@edit')->name('blog.edit');
 Route::patch('/blog/{id}/edit','BlogController@update');

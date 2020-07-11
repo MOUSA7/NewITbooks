@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -22,6 +21,12 @@
         <div class="row">
             <div class="col-sm-12">
                 <h1 class="page-header">Recent Users</h1>
+
+                @foreach($users as $user)
+
+                    {{Form::model($user,['method'=>'PATCH','action'=>['UsersController@update',$user->id]])}}
+
+                @endforeach
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -41,20 +46,15 @@
                                 <td>{{$user->created_at->diffForHumans()}}</td>
 
                                 <td>
-
-                                    {{Form::model($user,['method'=>'PATCH','action'=>['UsersController@update',$user->id]])}}
-
-
                                     {!! Form::select('role_id',$roles,null,['class'=>'form-control col-md-6']) !!}
-
-                                    <div class="form-group">
-                                        {{Form::submit('Submit',['class'=>'btn btn-primary '])}}
-                                    </div>
-
                                 </td>
                                 <td>
-                                    {!! Form::close() !!}
+                                    <div class="form-group">
+                                        {!! Form::submit('Submit',['class'=>'btn btn-primary ']) !!}
+                                    </div>
+                                </td>
 
+                                <td>
                                 </td>
                             </tr>
 
@@ -62,6 +62,9 @@
                         @endforeach
                         </tbody>
                     </table>
+                    {!! Form::close() !!}
+
+
                 </div>
             </div>
         </div>

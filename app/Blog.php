@@ -10,7 +10,7 @@ class Blog extends Model
     use SoftDeletes;
     protected $dates = ['deleted_at'];
     protected $fillable = ['title','body','photo_id','slug',
-               'meta_title','meta_desc','status'];
+               'meta_title','meta_desc','status','user_id'];
     //
 
     public function category(){
@@ -20,6 +20,12 @@ class Blog extends Model
     public function photo(){
 
         return $this->belongsTo(Photo::class);
+
+    }
+
+    public function user(){
+
+        return $this->belongsTo(User::class);
 
     }
 }

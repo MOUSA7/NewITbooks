@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @include('partials.meta_static')
@@ -6,21 +5,30 @@
 @section('content')
 
     <main class="container">
-    <div class="container-fluid">
+        <div class="container-fluid">
             <div class="jumbotron">
                 <h1>Latest Blog Posts</h1>
             </div>
 
-        <div class="col-sm-12">
-            @foreach($blogs as $blog)
-                <article>
-                    <h3><a href="{{route('blog.show',$blog->id)}}">{{$blog->title}}</a></h3>
+            <div class="col-sm-12">
+                @foreach($blogs as $blog)
+                    <article>
+                        <h3><a href="{{route('blog.show',$blog->slug)}}">{{$blog->title}}</a></h3>
 
-                    <h4>{!! $blog->body !!}</h4>
-                </article>
+                        <p>{!! Str::limit($blog->body,400) !!}</p>
+                        @if($blog->user)
+                            <p>Write By <i class="fa fa-btn fa-user"> <a href="#"> {{$blog->user->name}}</a> </i> /
+                                Posted <strong>
+                                    <i class="fa fa-btn fa-clock-o"> {{$blog->created_at->diffForHumans()}}</i></strong>
+                                @foreach($blog->category as $category)
+                                    <i class="fa fa-btn fa-cubes"> <a
+                                            href="{{route('categories.show',$category->slug)}}">{{$category->name}}</a></i> @endforeach
+                            </p>
+                        @endif
+                    </article>
 
-            @endforeach
-        </div>
+                @endforeach
+            </div>
 
 
         </div>
@@ -28,4 +36,4 @@
     </main>
 
 
- @endsection
+@endsection

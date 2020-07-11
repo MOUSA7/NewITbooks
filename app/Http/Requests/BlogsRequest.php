@@ -25,7 +25,7 @@ class BlogsRequest extends FormRequest
     {
 
         $rules = [
-            'title' => ['required','max:10','unique:blogs'],
+            'title' => ['required','max:20','unique:blogs'],
             'body'  => ['required','min:200'],
             'photo_id' => ['mimes:jpg,jpeg,png','max:1000'],
             'meta_desc' => ['required']

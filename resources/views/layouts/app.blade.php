@@ -21,6 +21,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div id="app">
@@ -41,6 +42,28 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
+
+                    <li class="dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            Categories <span class="caret"></span>
+                        </a>
+                        @if($c)
+                            <ul class="dropdown-menu" role="menu">
+                            @foreach($c as $c)
+                                @if($c->blog->count() > 0)
+
+                                        <li>
+                                            <a style="list-style-type: none" href="{{route('categories.show',$c->slug)}}">{{$c->name}}</a>
+                                        </li>
+
+                                    @endif
+                                @endforeach
+                            </ul>
+                            @endif
+
+                    </li>
+
                     <li><a class="nav-link" href="{{route('blog.index')}}" style="text-decoration: none">Blog <span class="badge bg-dark text-white"></span></a>
                     </li>
                     <li><a class="nav-link" href="{{route('admin.index')}}" style="text-decoration: none">Admin <span class="badge bg-dark text-white"></span></a>

@@ -19,8 +19,9 @@ class CreateBlogsTable extends Migration
             $table->string('slug')->unique()->index();
             $table->string('meta_title');
             $table->string('meta_desc',255);
-            $table->string('body', 500);
+            $table->text('body');
             $table->integer('status')->default(0);
+            $table->integer('user_id')->unsigned()->nullable();
             $table->integer('photo_id')->nullable();
             $table->timestamps();
         });
