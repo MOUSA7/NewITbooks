@@ -17,8 +17,8 @@
 
                         <p>{!! Str::limit($blog->body,400) !!}</p>
                         @if($blog->user)
-                            <p>Write By <i class="fa fa-btn fa-user"> <a href="#"> {{$blog->user->name}}</a> </i> /
-                                Posted <strong>
+                            <p>Write By <i class="fa fa-btn fa-user"> <a href="{{route('users.show',$blog->user->username)}}"> {{$blog->user->name}}</a>
+                                </i> / Posted <strong>
                                     <i class="fa fa-btn fa-clock-o"> {{$blog->created_at->diffForHumans()}}</i></strong>
                                 @foreach($blog->category as $category)
                                     <i class="fa fa-btn fa-cubes"> <a

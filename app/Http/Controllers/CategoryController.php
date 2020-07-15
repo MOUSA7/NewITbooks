@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct()
+    {
+        $this->middleware('admin',['except'=>['index','show','edit','update','create','store']]);
+    }
+
     public function index()
     {
         $categories = Category::latest()->get();
@@ -40,12 +42,20 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $roles = [
+            'name'=>'required',
+        ];
+        $messages = [
+            'name.required'=> 'This field name Is required'
+        ];
+        $this->validate($request,$roles,$messages);
+
         $category = new Category();
         $category->name = $request->name;
         $category->slug = Str::slug($request->name,'-');
         $category->save();
-
-        return redirect('categories');
+        Alert::success( 'Your Updated Users Successfully Now !');
+        return redirect('categories/create');
         //
     }
 
@@ -103,7 +113,7 @@ class CategoryController extends Controller
 
         $category->delete();
 
-        return redirect('categories');
+        return redirect('categories/create');
         //
     }
 }

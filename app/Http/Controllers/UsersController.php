@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Photo;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UsersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct()
+    {
+        $this->middleware('admin',['only'=>['userlist','destroy']]);
+    }
+
+
     public function index()
     {
         $users = User::all();
@@ -26,7 +31,6 @@ class UsersController extends Controller
     {
         $users = User::all();
         $roles = Role::pluck('name','id')->all();
-
         return view('users.userslist',compact('users','roles'));
         //
     }
@@ -58,8 +62,11 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($username)
     {
+        $user = User::whereUsername($username)->first();
+
+        return view('users.show',['user'=>$user]);
         //
     }
 
@@ -69,9 +76,17 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($username)
     {
-        //
+        $user = User::whereUsername($username)->first();
+
+
+        if (Auth::check() && Auth::user()->id == $user->id){
+
+            return view('users.edit',['user'=>$user]);
+
+        }
+        return 'Users Does Not Permission';        //
     }
 
     /**
@@ -83,8 +98,38 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id)->update($request->all());
+        $inputs = $request->all();
+        $roles = [
+          'name' =>['max:15','min:4']  ,
+          'photo_id' =>['mimes:jpg,jpeg,png','max:5000']  ,
+            'about' =>['max:20000']  ,
+        ];
+        $messages = [
+            'name'=>'Name must be between 6 to 30',
+            'photo_id'=>'Image must be jpg ,png Or jpeg'
+        ];
+        $this->validate($request,$roles,$messages);
+
+
+        $user = User::findOrFail($id);
         //
+
+        if (Auth::user()->id = $user->id){
+            if ($file = $request->file('photo_id')) {
+                if ($user->photo){
+                    unlink('images/' . $user->photo->file);
+                $user->photo->delete('file');
+            }
+                $name = time().$file->getClientOriginalName();
+                $file->move('images',$name);
+                $photo = Photo::create(['file'=>$name,'title'=>$name]);
+                $inputs['photo_id'] = $photo->id;
+            }
+        }
+        $user->update($inputs);
+
+        Alert::success( 'Your Updated Users Successfully Now !');
+
         return redirect()->back();
     }
 
@@ -96,6 +141,10 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
+        $user = User::findOrFail($id);
+        $user->delete();
+        Alert::success( 'Your Deleted Users Successfully Now !');
+        return redirect()->back();
         //
     }
 }

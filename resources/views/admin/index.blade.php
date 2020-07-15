@@ -12,7 +12,7 @@
                 <a href="{{route('blog.create')}}" class="btn btn-primary">Create Blog</a>
                 <a href="{{route('blog.trash')}}" class="btn btn-danger">Trash Blog</a>
                 <a href="{{route('media.index')}}" class="btn btn-warning">Feature Image</a>
-                <a href="{{route('users.index')}}" class="btn btn-success">User Management</a>
+                <a href="{{route('users.userslist')}}" class="btn btn-success">Users</a>
                 <a href="{{route('categories.create')}}" class="btn btn-info">Categories</a>
 
             </div>
@@ -30,36 +30,35 @@
                             <th>Title</th>
                             <th>Content</th>
                             <th>Status</th>
+                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($blogs as $blog)
                             <tr>
                                 <td>{{$blog->title}}</td>
-                                <td>{!! Str::limit($blog->body,70)  !!}</td>
+                                <td>{{ Str::limit($blog->body,70)}}</td>
                                 <td>{{$blog->status == 0 ? 'Draft' : 'Publish'}}</td>
                                 <td>
                                     @if($blog->status == 0)
 
                                         {!! Form::model($blog,['method'=>'PATCH','action'=>['BlogController@publish',$blog->id]]) !!}
 
-                                        <input type="hidden" name="status" value="1" >
+                                        <input type="hidden" name="status" value="1">
 
-                                        <div class="form-group">
-                                            {!! Form::submit('Publish',['class'=>'btn btn-primary'])  !!}
-                                        </div>
+
+                                        {!! Form::submit('Publish',['class'=>'btn btn-primary'])  !!}
+
 
                                         {!! Form::close() !!}
 
-                                        @else
+                                    @else
 
                                         {!! Form::model($blog,['method'=>'PATCH','action'=>['BlogController@publish',$blog->id]]) !!}
 
                                         <input type="hidden" value="0" name="status">
 
-                                        <div class="form-group">
-                                            {!! Form::submit('Draft',['class'=>'btn btn-success'])  !!}
-                                        </div>
+                                        {!! Form::submit('Draft',['class'=>'btn btn-success'])  !!}
 
                                         {!! Form::close() !!}
 

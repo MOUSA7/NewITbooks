@@ -7,16 +7,14 @@ use Illuminate\Support\Facades\View;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
+contains the "web" middleware group. Now create something great!
 */
-
+View::share('user',App\User::all());
 View::share('blogs',App\Blog::all());
 View::share('c',App\Category::latest()->get());
+
+
+
 
 
 Route::get('/', function () {
@@ -26,6 +24,8 @@ Route::get('/blog/trash','BlogController@trash')->name('blog.trash');
 Route::get('/blog/trash/{id}/restore','BlogController@restore');
 
 Auth::routes();
+
+Route::get('/userslist','UsersController@UserList')->name('users.userslist');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -37,9 +37,12 @@ Route::patch('/blog/{id}','BlogController@publish');
 Route::get('/blog/{id}/edit','BlogController@edit')->name('blog.edit');
 Route::patch('/blog/{id}/edit','BlogController@update');
 Route::get('/blog/{id}/delete','BlogController@delete');
+
 Route::get('/admin','AdminController@index')->name('admin.index');
 
-Route::get('/userslist','UsersController@UserList');
 Route::resource('/categories','CategoryController');
 Route::resource('/media','PhotoController');
 Route::resource('/users','UsersController');
+
+Route::get('/contact','MailController@contact');
+Route::post('/contact','MailController@send');

@@ -40,6 +40,11 @@
                     </div>
 
                     <div class="form-group">
+                        {!! Form::label("get email","Send the message to gmail :") !!}
+                        {!! Form::select("get_email",[0=>'No',1=>'yes'],null,["class"=>"form-control"]) !!}
+                    </div>
+
+                    <div class="form-group">
                         {!! Form::submit("Create Blog",['class'=>'btn btn-success']) !!}
                     </div>
 
@@ -48,6 +53,6 @@
                 </div>
 
             </div>
-        </div>
+
     </main>
 @endsection

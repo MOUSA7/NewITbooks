@@ -6,8 +6,10 @@ use App\Blog;
 use App\Category;
 use App\Http\Requests\BlogsRequest;
 use App\Photo;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -17,12 +19,14 @@ class BlogController extends Controller
 
     public function __construct()
     {
-//        $this->middleware('admin',['except'=>['index','show']]);
+        $this->middleware('both',['only'=>['create','store','edit','update']]);
+
+        $this->middleware('admin',['only'=>['publish','destroy']]);
     }
 
     public function index(){
 
-        $blogs = Blog::where('status',0)->latest()->get();
+        $blogs = Blog::where('status',1)->latest()->get();
 
         return view('blog.index',compact('blogs'));
     }
@@ -32,22 +36,37 @@ class BlogController extends Controller
         return view('blog.create',compact('categories'));
     }
 
-    public function store(BlogsRequest $request){
+    public function store(BlogsRequest $request)
+    {
 
         $inputs = $request->all();
 
         $inputs['slug'] = Str::slug($request->title);
         $inputs['meta_title'] = $request->title;
         $inputs['user_id'] = Auth::user()->id;
+        $inputs['email']  = Auth::user()->email;
 
-        if ($file = $request->file('photo_id')){
-            $name = time().$file->getClientOriginalName();
-            $file->move('images',$name);
-            $photo = Photo::create(['file'=>$name,'title'=>$name]);
+        if ($file = $request->file('photo_id')) {
+            $name = time() . $file->getClientOriginalName();
+            $file->move('images', $name);
+            $photo = Photo::create(['file' => $name, 'title' => $name]);
             $inputs['photo_id'] = $photo->id;
         }
 
-       $blog = Blog::create($inputs);
+
+        $blog = Blog::create($inputs);
+
+
+        $users = User::where('get_email',1)->get();
+
+            foreach ($users as $user) {
+                $user->email = $inputs['email'];
+                Mail::send('email.newblog', ['blog' => $blog, 'user' => $user],
+                    function ($message) use ($user) {
+                        $message->to($user->email)->from('mousashawa1@gmail.com', 'Mousa')->subject('WoW Your Created New Blog With email');
+//                        dd($user->email);
+                    });
+            }
 
        if ($categoriesId = $request->category_id){
            $blog->category()->sync($categoriesId);
@@ -145,6 +164,7 @@ class BlogController extends Controller
     }
     public function publish(Request $request , $id){
         $blog = Blog::findOrFail($id)->update($request->all());
+        Alert::success( 'Your Updated Blog Successfully Now !');
         return redirect()->back();
     }
     //

@@ -66,8 +66,14 @@
 
                     <li><a class="nav-link" href="{{route('blog.index')}}" style="text-decoration: none">Blog <span class="badge bg-dark text-white"></span></a>
                     </li>
+                    @if(Auth::check())
+                    <li><a class="nav-link" href="{{route('users.index')}}" style="text-decoration: none">Dashboard<span class="badge bg-dark text-white"></span></a>
+                    </li>
+                    @endif
+                    @if(Auth::check() && Auth::user()->role_id ==1)
                     <li><a class="nav-link" href="{{route('admin.index')}}" style="text-decoration: none">Admin <span class="badge bg-dark text-white"></span></a>
                     </li>
+                        @endif
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -113,5 +119,6 @@
     </main>
 </div>
 @include('sweetalert::alert')
+
 </body>
 </html>
