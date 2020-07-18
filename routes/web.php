@@ -14,8 +14,11 @@ View::share('blogs',App\Blog::all());
 View::share('c',App\Category::latest()->get());
 
 
+Route::get('/redirect', 'SocialAuthController@redirect');
+Route::get('/callback', 'SocialAuthController@callback');
 
-
+//Route::get('/login/facebook','Auth\LoginController@redirectToProvider');
+//Route::get('/login/facebook/callback','Auth\LoginController@handleProviderCallback');
 
 Route::get('/', function () {
     return view('welcome');

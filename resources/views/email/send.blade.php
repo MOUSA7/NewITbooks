@@ -7,11 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Contact Form Blog</title>
 </head>
+<body>
 <h1 style="text-align: center; background-color: #333844;color: white">Contact Form It Blog</h1>
 
 <blockquote>
 
-    <h2> You have received Message from{{$name}}</h2>
+    <h2> You have received Message from {{$name}}</h2>
     <h3>{{$email}}</h3>
     <p>Subject : {{$subject}}</p>
     <p>Message : {{$mail_message}}</p>
