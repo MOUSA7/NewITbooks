@@ -10,8 +10,9 @@
 <body style="padding: 0 10%">
 <h1 style="text-align: center; background-color: #333844;color: white">New It Blog</h1>
 <blockquote>
-
+@if($user->username)
 <h2> Hi <a href="{{route('users.show',$user->username)}}"></a>{{$user->name}}</h2>
+    @endif
 <h3>New It WebSite With Blog {{$blog->title}} has been posted blog in NewItBook</h3>
     <h4>Category : @foreach($c as $category)
         <span><a href="{{route('categories.show',$category->slug)}}">{{$category->name}}</a></span>

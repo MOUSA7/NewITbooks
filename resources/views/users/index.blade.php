@@ -12,7 +12,9 @@
                     <a href="{{route('blog.create')}}" class="btn btn-primary ">Create Blog</a>
                     <a href="{{route('categories.index')}}" class="btn btn-warning">Categories</a>
                 @endif
+                        @if(Auth::user()->username)
                 <a href="{{route('users.edit',Auth::user()->username)}}" class="btn btn-success">Setting users</a>
+                            @endif
                     </div>
                         <div class="col-sm-4">
                     <img class="img-thumbnail" height="100" width="50%"

@@ -27,12 +27,14 @@
                 <br>
                 <hr>
                     @if($user->blog->count() > 0)
+                        @if($user->username)
                     <h1>latest Blog by
                         <a href="{{route('users.show',$user->username)}}">
                             <small>{{$user->name}}</small>
                             <hr>
                         </a>
                     </h1>
+                    @endif
                         <ul>
                             @foreach($user->blog->reverse() as $blog)
                                 <h3><a href="{{route('blog.show',$blog->slug)}}">{{$blog->title}}</a></h3>

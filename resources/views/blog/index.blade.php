@@ -16,7 +16,7 @@
                         <h3><a href="{{route('blog.show',$blog->slug)}}">{{$blog->title}}</a></h3>
 
                         <p>{!! Str::limit($blog->body,400) !!}</p>
-                        @if($blog->user)
+                        @if($blog->user->username)
                             <p>Write By <i class="fa fa-btn fa-user"> <a href="{{route('users.show',$blog->user->username)}}"> {{$blog->user->name}}</a>
                                 </i> / Posted <strong>
                                     <i class="fa fa-btn fa-clock-o"> {{$blog->created_at->diffForHumans()}}</i></strong>
@@ -25,6 +25,7 @@
                                             href="{{route('categories.show',$category->slug)}}">{{$category->name}}</a></i> @endforeach
                             </p>
                         @endif
+
                     </article>
 
                 @endforeach

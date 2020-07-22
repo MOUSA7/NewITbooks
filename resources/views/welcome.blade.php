@@ -14,8 +14,8 @@
                 @foreach($blogs as $blog)
                     <article>
                         <h3><a href="{{route('blog.show',$blog->slug)}}">{{$blog->title}}</a></h3>
-
                         <p>{!! Str::limit($blog->body,400) !!}</p>
+                        @if(Auth::user())
                         @if($blog->user)
                             <p>Write By <i class="fa fa-btn fa-user"> <a href="{{route('users.show',$blog->user->username)}}"> {{$blog->user->name}}</a>
                                 </i> / Posted <strong>
@@ -25,6 +25,7 @@
                                             href="{{route('categories.show',$category->slug)}}">{{$category->name}}</a></i> @endforeach
                             </p>
                         @endif
+                            @endif
                     </article>
 
                 @endforeach
